@@ -1,0 +1,7 @@
+Copyright (c) 2025 Németh Szilveszter
+
+All rights reserved.
+
+This source code and all associated files are proprietary and confidential. No part of this code may be used, copied, modified, distributed, or disclosed in any form or by any means without the express written permission of the copyright holder.
+
+Unauthorized use, reproduction, or distribution of this code, whether in original or modified form, is strictly prohibited.

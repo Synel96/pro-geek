@@ -1,0 +1,33 @@
+# Python/Django
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+db.sqlite3
+env/
+venv/
+ENV/
+.env
+*.log
+media/
+staticfiles/
+
+# React/Vite
+node_modules/
+dist/
+.env
+.DS_Store
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
