@@ -7,8 +7,12 @@ class UserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, registration_code=None, **extra_fields):
         if not username:
             raise ValueError('The Username must be set')
-        if not extra_fields.get('is_superuser', False) and not registration_code:
-            raise ValueError('Registration code is required for normal users.')
+        # Accept registration_code from extra_fields if not passed directly
+        if not extra_fields.get('is_superuser', False):
+            if not registration_code:
+                registration_code = extra_fields.get('registration_code')
+            if not registration_code:
+                raise ValueError('Registration code is required for normal users.')
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, registration_code=registration_code, **extra_fields)
         user.set_password(password)
