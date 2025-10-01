@@ -40,7 +40,7 @@ class CookieTokenRefreshView(TokenRefreshView):
 
 class CookieLogoutView(APIView):
     def post(self, request):
-        response = Response({'detail': 'Logged out'}, status=200)
+        response = Response({'detail': 'Logged out'}, status=204)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
         return response

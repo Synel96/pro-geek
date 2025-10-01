@@ -54,6 +54,9 @@ class BlogPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.title
 
@@ -61,6 +64,9 @@ class BlogSection(models.Model):
     blog_post = models.ForeignKey(BlogPost, related_name='sections', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
+
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
         return f"{self.blog_post.title} - {self.title}"
