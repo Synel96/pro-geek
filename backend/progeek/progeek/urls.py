@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("authapp.urls")),
+    path('blog/', include('blogapp.urls')),
 ]
 
 if settings.DEBUG:
