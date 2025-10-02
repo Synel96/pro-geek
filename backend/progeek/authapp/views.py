@@ -51,6 +51,16 @@ class RegistrationView(APIView):
         if serializer.is_valid():
             try:
                 serializer.save()
+                # Regisztrációs kód beállítása used-ra
+                code_val = request.data.get('registration_code')
+                if code_val:
+                    try:
+                        code_obj = RegistrationCode.objects.get(code=code_val, is_used=False)
+                        code_obj.is_used = True
+                        code_obj.used_at = timezone.now()
+                        code_obj.save()
+                    except RegistrationCode.DoesNotExist:
+                        pass
             except ValueError as e:
                 return Response({'registration_code': [str(e)]}, status=status.HTTP_400_BAD_REQUEST)
             return Response({'detail': 'Registration successful'}, status=status.HTTP_201_CREATED)
