@@ -18,6 +18,15 @@ def section_video_upload_to(instance, filename):
     section_slug = slugify(instance.section.title)
     return os.path.join(post_slug, section_slug, 'videos', filename)
 
+def news_preview_upload_to(instance, filename):
+    title_slug = slugify(instance.title)
+    return os.path.join('news', title_slug, filename)
+
+def news_section_image_upload_to(instance, filename):
+    post_slug = slugify(instance.section.blog_post.title)
+    section_slug = slugify(instance.section.title)
+    return os.path.join('news', post_slug, section_slug, filename)
+
 class RegistrationCode(models.Model):
     code = models.CharField(max_length=32, unique=True)
     is_used = models.BooleanField(default=False)
@@ -60,10 +69,26 @@ class BlogPost(models.Model):
     def __str__(self):
         return self.title
 
+class News(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=150)
+    content = models.TextField(max_length=450)
+    preview_image = models.ImageField(upload_to=news_preview_upload_to)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Hír'
+        verbose_name_plural = 'Hírek'
+
+    def __str__(self):
+        return self.title
+
 class BlogSection(models.Model):
     blog_post = models.ForeignKey(BlogPost, related_name='sections', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    content = models.TextField()
+    content = models.TextField(max_length=450)
 
     class Meta:
         ordering = ['-id']
@@ -73,7 +98,7 @@ class BlogSection(models.Model):
 
 class SectionImage(models.Model):
     section = models.ForeignKey(BlogSection, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=section_image_upload_to)
+    image = models.ImageField(upload_to=news_section_image_upload_to)
 
     def __str__(self):
         return f"Image for {self.section.title}"
@@ -84,3 +109,18 @@ class SectionVideo(models.Model):
 
     def __str__(self):
         return f"Video for {self.section.title}"
+
+class Event(models.Model):
+    event_title = models.CharField(max_length=255)
+    host = models.CharField(max_length=150)
+    event_type = models.CharField(max_length=100)
+    date = models.DateField()
+    reward = models.BooleanField(default=False)
+    location = models.CharField(max_length=255)
+    campfire_link = models.URLField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"{self.event_title} ({self.date})"
