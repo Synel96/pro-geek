@@ -4,11 +4,14 @@ from rest_framework.permissions import IsAuthenticated
 from core.models import Event
 from .serializers import EventSerializer
 from django.views.decorators.cache import cache_page
+from rest_framework.filters import SearchFilter
 
 class EventListView(ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [SearchFilter]
+    search_fields = ['event_title', 'host', 'event_type', 'location']
     @cache_page(60 * 15)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
