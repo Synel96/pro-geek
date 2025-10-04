@@ -2,6 +2,7 @@ from rest_framework import serializers
 from core.models import BlogPost, BlogSection, SectionImage, SectionVideo
 
 class SectionImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
     class Meta:
         model = SectionImage
         fields = ['id', 'image']
@@ -19,6 +20,7 @@ class BlogSectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'content', 'images', 'videos']
 
 class BlogPostSerializer(serializers.ModelSerializer):
+    preview_image = serializers.ImageField(use_url=True)
     sections = BlogSectionSerializer(many=True, read_only=True)
     author = serializers.StringRelatedField()
     class Meta:

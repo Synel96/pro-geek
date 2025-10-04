@@ -3,6 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from .managers import UserManager
 import os
 from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import cloudinary
 
 def blog_preview_upload_to(instance, filename):
     title_slug = slugify(instance.title)
@@ -59,7 +63,7 @@ class User(AbstractUser):
 class BlogPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    preview_image = models.ImageField(upload_to=blog_preview_upload_to)
+    preview_image = CloudinaryField('image')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -73,7 +77,7 @@ class News(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=150)
     content = models.TextField(max_length=450)
-    preview_image = models.ImageField(upload_to=news_preview_upload_to)
+    preview_image = CloudinaryField('image')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -98,7 +102,7 @@ class BlogSection(models.Model):
 
 class SectionImage(models.Model):
     section = models.ForeignKey(BlogSection, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=news_section_image_upload_to)
+    image = CloudinaryField('image')
 
     def __str__(self):
         return f"Image for {self.section.title}"
@@ -124,3 +128,18 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.event_title} ({self.date})"
+
+@receiver(post_delete, sender=BlogPost)
+def delete_blogpost_image(sender, instance, **kwargs):
+    if instance.preview_image:
+        cloudinary.uploader.destroy(instance.preview_image.public_id)
+
+@receiver(post_delete, sender=News)
+def delete_news_image(sender, instance, **kwargs):
+    if instance.preview_image:
+        cloudinary.uploader.destroy(instance.preview_image.public_id)
+
+@receiver(post_delete, sender=SectionImage)
+def delete_sectionimage_image(sender, instance, **kwargs):
+    if instance.image:
+        cloudinary.uploader.destroy(instance.image.public_id)

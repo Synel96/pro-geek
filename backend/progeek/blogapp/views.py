@@ -6,6 +6,7 @@ from rest_framework import serializers
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.cache import cache_page
+import sys
 
 class BlogPostListSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
@@ -17,9 +18,13 @@ class BlogPostListView(generics.ListAPIView):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostListSerializer
     permission_classes = [IsAuthenticated]
-    @cache_page(60 * 15)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    if not ('test' in sys.argv or 'pytest' in sys.argv):
+        @cache_page(60 * 15)
+        def dispatch(self, *args, **kwargs):
+            return super().dispatch(*args, **kwargs)
+    else:
+        def dispatch(self, *args, **kwargs):
+            return super().dispatch(*args, **kwargs)
 
 class BlogPostDetailView(generics.RetrieveAPIView):
     queryset = BlogPost.objects.all()
