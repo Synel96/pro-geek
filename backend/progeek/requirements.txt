@@ -5,6 +5,7 @@ cloudinary
 python-dotenv
 drf-spectacular
 djangorestframework
+djangorestframework-simplejwt
 gunicorn
 django-nested-admin
 django-cors-headers
