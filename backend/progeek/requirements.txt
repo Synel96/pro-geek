@@ -3,9 +3,9 @@ psycopg2-binary
 django-cloudinary-storage
 cloudinary
 python-dotenv
-Pillow
 drf-spectacular
 djangorestframework
 gunicorn
 django-nested-admin
 django-cors-headers
+whitenoise
