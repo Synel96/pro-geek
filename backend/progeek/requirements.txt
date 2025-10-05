@@ -10,3 +10,4 @@ gunicorn
 django-nested-admin
 django-cors-headers
 whitenoise
+django-filter
