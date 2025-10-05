@@ -1,0 +1,11 @@
+Django>=5.2.1
+psycopg2-binary
+django-cloudinary-storage
+cloudinary
+python-dotenv
+Pillow
+drf-spectacular
+djangorestframework
+nested-admin
+gunicorn
+django-nested-admin
