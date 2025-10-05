@@ -6,5 +6,5 @@ python-dotenv
 Pillow
 drf-spectacular
 djangorestframework
-nested-admin
 gunicorn
+django-nested-admin
