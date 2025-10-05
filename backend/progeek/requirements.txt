@@ -8,3 +8,4 @@ drf-spectacular
 djangorestframework
 gunicorn
 django-nested-admin
+django-cors-headers
