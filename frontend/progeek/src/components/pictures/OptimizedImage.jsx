@@ -1,32 +1,36 @@
 import React from "react";
 
 /**
- * Universal, accessible, responsive image component for Cloudinary images (f_auto param már backendből jön).
- * Usage: <OptimizedImage src={cloudinaryUrl} alt="..." width={...} height={...} sizes="..." />
+ * Universal, accessible, responsive image component for vite-imagetools srcset (webp/avif fallback).
+ * Usage: <OptimizedImage srcSet={logoSrcSet} fallback={logoPng} alt="..." width={...} height={...} sizes="..." fetchPriority="high" />
  */
 export default function OptimizedImage({
-  src,
+  srcSet,
+  fallback,
   alt = "",
   width,
   height,
   sizes = "100vw",
   style = {},
   className = "",
+  fetchPriority = undefined,
   ...props
 }) {
-  // Accessibility: alt is required, width/height for layout shift prevention
-  // Responsive: sizes prop, style: maxWidth: "100%", height: "auto"
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      sizes={sizes}
-      loading="lazy"
-      style={{ maxWidth: "100%", height: "auto", ...style }}
-      className={className}
-      {...props}
-    />
+    <picture>
+      <source srcSet={srcSet} type="image/avif, image/webp" sizes={sizes} />
+      <img
+        src={fallback}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes={sizes}
+        loading={fetchPriority === "high" ? undefined : "lazy"}
+        fetchPriority={fetchPriority}
+        style={{ maxWidth: "100%", height: "auto", ...style }}
+        className={className}
+        {...props}
+      />
+    </picture>
   );
 }
