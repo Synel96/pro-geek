@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Sitemap: csak akkor add hozzá, ha már van végleges domain és sitemap
